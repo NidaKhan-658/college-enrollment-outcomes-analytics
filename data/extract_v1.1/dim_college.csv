@@ -1,0 +1,31 @@
+college_id,college_name,state,region,control_type,size_tier,selectivity_tier
+C01,Alder Institute,PA,Northeast,Private For-Profit,Large,Open Admission
+C02,Brookhaven College,MA,Northeast,Private Nonprofit,Small,Moderately Selective
+C03,Cedar Ridge State University,OR,West,Public,Large,Moderately Selective
+C04,Dunmore Institute,OH,Midwest,Private For-Profit,Small,Open Admission
+C05,Eastgate Institute,IL,Midwest,Private For-Profit,Large,Open Admission
+C06,University of Fairhaven,VA,South,Private Nonprofit,Small,Moderately Selective
+C07,Glenmoor State University,MN,Midwest,Public,Large,Open Admission
+C08,Harborview College,WI,Midwest,Private Nonprofit,Medium,Moderately Selective
+C09,Ironwood Institute,MA,Northeast,Private For-Profit,Medium,Open Admission
+C10,Juniper Falls State University,FL,South,Public,Large,Open Admission
+C11,University of Kestrel,GA,South,Private Nonprofit,Medium,Moderately Selective
+C12,Lakemont College,IL,Midwest,Private Nonprofit,Small,Moderately Selective
+C13,Maplewood State University,VA,South,Public,Medium,Moderately Selective
+C14,Northfield State University,TN,South,Public,Large,Moderately Selective
+C15,Oakhurst College,WI,Midwest,Private Nonprofit,Large,Highly Selective
+C16,Pinecrest State University,WA,West,Public,Medium,Moderately Selective
+C17,Quarry Hill State University,CO,West,Public,Medium,Open Admission
+C18,Redwater College,AZ,West,Private Nonprofit,Medium,Moderately Selective
+C19,University of Stonebridge,OR,West,Private Nonprofit,Medium,Moderately Selective
+C20,Timberline College,NY,Northeast,Private Nonprofit,Medium,Moderately Selective
+C21,University of Upland,MI,Midwest,Private Nonprofit,Small,Highly Selective
+C22,Valemont State University,MA,Northeast,Public,Medium,Moderately Selective
+C23,Westbrook College,NJ,Northeast,Private Nonprofit,Medium,Highly Selective
+C24,Yarrow Institute,GA,South,Private For-Profit,Small,Open Admission
+C25,Zephyr Bay State University,IL,Midwest,Public,Large,Moderately Selective
+C26,Ashford State University,MI,Midwest,Public,Medium,Moderately Selective
+C27,Briarwood Institute,AZ,West,Private For-Profit,Small,Open Admission
+C28,Copperfield State University,WI,Midwest,Public,Small,Moderately Selective
+C29,Driftwood College,TX,South,Private Nonprofit,Large,Moderately Selective
+C30,Elmhurst State University,CO,West,Public,Small,Moderately Selective

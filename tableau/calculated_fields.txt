@@ -1,0 +1,64 @@
+TABLEAU CALCULATED FIELDS - copy and paste (Analysis > Create Calculated Field)
+Field names in [brackets] must match the Data Mapping sheet. Build in this order.
+
+=== PARAMETERS (Create Parameter) ===
+Last Complete Cohort        Integer, range 2018-2025, step 1, default 2020
+Minimum Students to Rank    Integer, range 0-300, step 10, default 100
+
+=== HELPER FIELDS (folder: Calculations) ===
+Is Graduate            IF [Enrollment Status] = "Graduated" THEN 1 ELSE 0 END
+Is Dropout             IF [Enrollment Status] = "Dropped Out" THEN 1 ELSE 0 END
+Is Active              IF [Enrollment Status] = "Enrolled (Active)" THEN 1 ELSE 0 END
+Completed Cohort       [Cohort Year] <= [Last Complete Cohort]
+Completed Student      IF [Completed Cohort] THEN 1 ELSE 0 END
+Completed Graduate     IF [Completed Cohort] THEN [Is Graduate] ELSE 0 END
+Completed Dropout      IF [Completed Cohort] THEN [Is Dropout] ELSE 0 END
+FY Dropout             IF [Is Dropout] = 1 AND [Years to Outcome] = 1 THEN 1 ELSE 0 END
+Completed FY Dropout   IF [Completed Cohort] THEN [FY Dropout] ELSE 0 END
+Completed GPA Sum      IF [Completed Cohort] THEN [Cumulative GPA] ELSE 0 END
+
+=== KPI FIELDS ===
+Graduation Rate        SUM([Completed Graduate]) / SUM([Completed Student])
+Dropout Rate           SUM([Completed Dropout]) / SUM([Completed Student])
+Attrition to Date      SUM([Is Dropout]) / COUNT([Student ID])
+First-Year Retention   1 - SUM([Completed FY Dropout]) / SUM([Completed Student])
+Avg GPA                SUM([Completed GPA Sum]) / SUM([Completed Student])
+Performance Index      100 * (0.60 * [Graduation Rate] + 0.25 * [First-Year Retention] + 0.15 * [Avg GPA] / 4)
+Admit Rate             SUM([Admitted Flag]) / COUNT([Application ID])
+Yield Rate             SUM([Enrolled Flag]) / SUM([Admitted Flag])
+
+=== DASHBOARD 2 EXTRAS ===
+Grad Flag              IF [Graduation Rate] = WINDOW_MAX([Graduation Rate]) THEN "Highest"
+                       ELSEIF [Graduation Rate] = WINDOW_MIN([Graduation Rate]) THEN "Lowest" ELSE "Other" END
+Drop Flag              IF [Dropout Rate] = WINDOW_MAX([Dropout Rate]) THEN "Highest"
+                       ELSEIF [Dropout Rate] = WINDOW_MIN([Dropout Rate]) THEN "Lowest" ELSE "Other" END
+Meets Min Students     SUM([Completed Student]) >= [Minimum Students to Rank]
+(Grad Flag and Drop Flag are table calculations: set Compute Using = Field of Study.)
+
+=== LOD LAB (demos A-D) ===
+A1 Benchmark - Table Calc   TOTAL(SUM([Completed Dropout])) / TOTAL(SUM([Completed Student]))
+A2 Benchmark - EXCLUDE      {EXCLUDE [Field of Study] : SUM([Completed Dropout])} / {EXCLUDE [Field of Study] : SUM([Completed Student])}
+A3 Benchmark - FIXED        {FIXED : SUM([Completed Dropout])} / {FIXED : SUM([Completed Student])}
+B1 Share - Table Calc       COUNT([Student ID]) / TOTAL(COUNT([Student ID]))
+B2 Share - FIXED            COUNT([Student ID]) / MIN({FIXED : COUNT([Student ID])})
+C1 Pooled Graduation Rate   SUM([Completed Graduate]) / SUM([Completed Student])
+C2 Avg of College Rates     AVG({FIXED [College ID] : SUM([Completed Graduate]) / SUM([Completed Student])})
+C3 Avg of College Rates (by field)   AVG({INCLUDE [College ID] : SUM([Completed Graduate]) / SUM([Completed Student])})
+(Demo D reuses A3: once with Control Type as a normal filter, once added to Context.)
+
+=== CR-001 ADDITIONS (extract v1.1) ===
+Has Scholarship        IF [Annual Scholarship USD] > 0 THEN 1 ELSE 0 END
+Aid Coverage           ([Annual Scholarship USD] + [Annual Grant USD]) / [Annual Tuition USD]
+Aid Coverage Band      IF [Aid Coverage] = 0 THEN "No aid" ELSEIF [Aid Coverage] <= 0.25 THEN "Under 25%"
+                       ELSEIF [Aid Coverage] <= 0.5 THEN "25-50%" ELSE "Over 50%" END
+Avg Award (Recipients) SUM([Annual Scholarship USD]) / SUM([Has Scholarship])
+KPI-11 Avg Scholarship AVG([Annual Scholarship USD])
+KPI-12 Recipient Rate  SUM([Has Scholarship]) / COUNT([Student ID])
+KPI-13 Avg Net Cost    AVG([Annual Net Cost USD])
+KPI-14 Utilization     SUM([Scholarship Awarded USD]) / SUM([Scholarship Budget USD])
+KPI-15 Funding/Student (SUM([State Appropriation USD]) + SUM([Federal Research Grants USD]) + SUM([Endowment Payout USD])) / SUM([Total Enrollment Est])
+C4 Pooled Avg Scholarship         AVG([Annual Scholarship USD])
+C5 Avg of College Avgs (overall)  AVG({FIXED [College ID] : AVG([Annual Scholarship USD])})
+C6 Avg of College Avgs (by field) AVG({INCLUDE [College ID] : AVG([Annual Scholarship USD])})
+E1 Funding - naive (joined data source only)   SUM([State Appropriation USD])
+E2 Funding - FIXED (joined data source only)   SUM({FIXED [College ID], [Fiscal Year] : MAX([State Appropriation USD])})
